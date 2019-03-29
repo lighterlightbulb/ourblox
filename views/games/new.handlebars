@@ -1,0 +1,23 @@
+<h1>New Game</h1>
+{{~#if error}}
+<div role="alert" class="alert alert-danger">{{error}}</div>
+{{~/if}}
+
+<form method="POST">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input class="form-control" name="name" maxlength="20" required>
+  </div>
+  <div class="form-group">
+    <label for="name">Description</label>
+    <textarea class="form-control" name="description" maxlength="2000">No description</textarea>
+  </div>
+  <div class="form-group">
+    <label for="maxplayers">Max Players</label>
+    <input class="form-control" name="maxplayers" value="12" min="1" max="200" type="number" required>
+  </div>
+  <div class="form-group">
+    {{{captcha}}}
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>

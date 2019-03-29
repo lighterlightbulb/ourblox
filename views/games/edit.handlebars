@@ -1,0 +1,26 @@
+<h1>Editing {{game.name}}</h1>
+{{~#if error}}
+<div role="alert" class="alert alert-danger">{{error}}</div>
+{{~/if}}
+{{~#if success}}
+<div role="alert" class="alert alert-success">{{success}}</div>
+{{~/if}}
+
+<form method="POST">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input class="form-control" name="name" maxlength="20" value="{{game.name}}" required>
+  </div>
+  <div class="form-group">
+    <label for="name">Description</label>
+    <textarea class="form-control" name="description" maxlength="2000">{{game.description}}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="maxplayers">Max Players</label>
+    <input class="form-control" name="maxplayers" value="{{game.maxplayers}}" min="1" max="200" type="number" required>
+  </div>
+  <div class="form-group">
+    {{{captcha}}}
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>

@@ -3,11 +3,11 @@ var router = express.Router()
 var utils = require('../utils')
 
 router.get('/', function (req, res) {
-    res.send("The app is ready! Hewwo!")
+    res.render("home", { title: "Home", home: true })
 })
 
 router.get('/omg', utils.checkAuth, function (req, res) {
-    res.send("This is a secret route that requires authenication! Hewwo!")
+    res.send("This is a secret route that requires authenication!")
 })
 
 module.exports = router

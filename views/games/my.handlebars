@@ -1,0 +1,9 @@
+<h1>My Games</h1>
+<a href="/games/new">Create new game.</a>
+
+{{#each results}}
+<br>
+<h5>{{this.name}}</h1>
+<p>1/10 Players</p>
+<a href="/games/view?id={{this.id}}">Join</a>
+{{/each}}

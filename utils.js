@@ -1,4 +1,17 @@
+//this file is included with all routes, it contains things that most routes would need such as access to the database and the auth checking function
+//not sure why i need to do this, node is werid
 var exports = module.exports = {}
+var mysql  = require('mysql2')
+
+var pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
+  })
+
+exports.connection = pool
 
 exports.checkAuth = function (req, res, next) {
  /*

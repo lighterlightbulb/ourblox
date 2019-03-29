@@ -14,28 +14,13 @@ var session  = require('cookie-session')
 var passport = require('passport')
 var DiscordStrategy = require('passport-discord').Strategy
 var refresh = require('passport-oauth2-refresh')
-var mysql  = require('mysql2')
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
+var utils = require('./utils')
 
-var connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE
-})
+var connection = utils.connection
 
 var app = express()
-
-connection.connect(function(err) {
-  if (err) {
-    console.error('Error connecting to MySQL: ' + err.stack)
-    return
-  }
-
-  console.log('Connected to MySQL as ID ' + connection.threadId)
-})
 
 passport.serializeUser(function(user, done) {
   done(null, user)
@@ -47,7 +32,7 @@ passport.deserializeUser(function(obj, done) {
 var discordStrat = new DiscordStrategy({
     clientID: process.env.DISCORD_ID,
     clientSecret: process.env.DISCORD_SECRET,
-    callbackURL: 'http://localhost:3000/callback',
+    callbackURL: process.env.DISCORD_CALLBACK,
     scope: ['identify']
 }, function(accessToken, refreshToken, profile, done) {
     profile.refreshToken = refreshToken // store this for later refreshes
@@ -91,7 +76,44 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}))
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main',
+  helpers: {
+      eq: function (v1, v2) {
+          return v1 === v2;
+      },
+      ne: function (v1, v2) {
+          return v1 !== v2;
+      },
+      lt: function (v1, v2) {
+          return v1 < v2;
+      },
+      gt: function (v1, v2) {
+          return v1 > v2;
+      },
+      lte: function (v1, v2) {
+          return v1 <= v2;
+      },
+      gte: function (v1, v2) {
+          return v1 >= v2;
+      },
+      and: function () {
+          return Array.prototype.slice.call(arguments).every(Boolean);
+      },
+      or: function () {
+          return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+      },
+      m: function (v1, v2) {
+        return v1 + v2;
+      },
+      repeat: function(n, block) {
+        var accum = ''
+        for(var i = 0; i < n; ++i)
+            accum += block.fn(i)
+        return accum
+      }
+    },
+}))
 
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -100,9 +122,15 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 const main = require('./routes/main')
 const auth = require('./routes/auth')
+const games = require('./routes/games')
 
 app.use('/', main)
 app.use('/', auth)
+app.use('/games', games)
+
+app.all('/*', function (req, res) {
+  res.status(404).render('404', { title: "404 Not Found" })
+})
 
 app.listen(process.env.SERVER_PORT, function () {
     console.log(`Application server running on port ${process.env.SERVER_PORT}`)
