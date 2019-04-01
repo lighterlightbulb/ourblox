@@ -26,3 +26,17 @@ exports.checkAuth = function (req, res, next) {
     if (req.isAuthenticated()) return next()
     res.redirect("/login")
 }
+
+exports.makeId = function (length) {
+  var text = ""
+  var possible = "abcdefghijklmnopqrstuvwxyz"
+
+  for (var i = 0; i < length; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+
+  return text;
+}
+
+exports.sleep = function (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

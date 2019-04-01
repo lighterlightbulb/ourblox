@@ -1,4 +1,49 @@
 <h1>{{game.name}}</h1>
 <p>1/10 Players</p>
 <p>{{game.description}}</p>
-<a href="/games/view?id={{game.id}}">Join</a>
+<button class="btn btn-primary" onclick="joinGame({{game.id}})">Join</button>
+
+<h2>Servers</h2>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+function joinGame(id) {
+Swal.fire({
+  title: "Waiting for server...",
+  allowOutsideClick: () => !Swal.isLoading(),
+  onBeforeOpen: () => {
+    Swal.showLoading()
+    return fetch(`/games/token?id=${id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
+        return response.json()
+      })
+      .catch(error => {
+        Swal.fire({
+            title: "Error",
+            text: error,
+            type: "error"
+        })
+      })
+      .then((result) => {
+        if (result.url) {
+            Swal.fire({
+                title: "Launching client...",
+                text: result.url,
+                type: "success"
+            })
+            //Swal.showLoading()
+        } else {
+            Swal.fire({
+                title: "Error",
+                text: result.reason,
+                type: "error"
+            })
+        }
+      })
+}
+})
+}
+</script>
