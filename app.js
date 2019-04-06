@@ -103,7 +103,7 @@ app.engine('handlebars', exphbs({
       or: function () {
           return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
       },
-      m: function (v1, v2) {
+      math: function (v1, v2) {
         return v1 + v2;
       },
       repeat: function(n, block) {
@@ -111,6 +111,9 @@ app.engine('handlebars', exphbs({
         for(var i = 0; i < n; ++i)
             accum += block.fn(i)
         return accum
+      },
+      plural: function (v1) {
+        if (v1 === 0 || v1 > 1) return "s"
       }
     },
 }))

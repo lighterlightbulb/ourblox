@@ -4,10 +4,14 @@
 <button class="btn btn-primary" onclick="joinGame({{game.id}})">Join</button>
 
 <h2>Servers</h2>
-
+{{#each servers}}
+{{this.players}} Player{{plural this.players}} <button class="btn btn-primary" onclick="joinGame({{game.id}}, {{this.name}})">Join</button>
+{{else}}
+There are no servers.
+{{/each}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script>
-function joinGame(id) {
+function joinGame(id, name) {
 Swal.fire({
   title: "Waiting for server...",
   allowOutsideClick: () => !Swal.isLoading(),
@@ -34,6 +38,7 @@ Swal.fire({
                 text: result.url,
                 type: "success"
             })
+            window.location.href = result.url
             //Swal.showLoading()
         } else {
             Swal.fire({
