@@ -1,5 +1,5 @@
 var soap = require('./soap');
-var fetch = require('fetch');
+var fetch = require('node-fetch');
 var exports = module.exports = {};
 
 const config = require('./config.json');
