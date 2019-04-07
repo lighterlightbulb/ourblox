@@ -1,4 +1,5 @@
-//SOAP Functions
+/* Copyright 2019 Ourblox, All Rights Reserved */
+
 var exports = module.exports = {}
 
 const body = `
@@ -10,5 +11,5 @@ const bodyEnd = `
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>`
 
-exports.body = body
-exports.bodyEnd = bodyEnd
+exports.body = body;
+exports.bodyEnd = bodyEnd;

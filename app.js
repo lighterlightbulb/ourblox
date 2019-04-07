@@ -1,7 +1,9 @@
 /*
-OurBlox Public Website
-Developed by 1002
-Contact: ozzt@protonmail.com
+    Ourblox Website
+    Made by 1002, swirln
+    Contact: ozzt@protonmail.com, sw1rlnn@gmail.com
+
+    Copyright 2019 Ourblox, All Rights Reserved
 */
 
 //'use strict'

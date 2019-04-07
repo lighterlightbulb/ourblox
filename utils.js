@@ -1,3 +1,5 @@
+/* Copyright 2019 Ourblox, All Rights Reserved */
+
 //this file is included with all routes, it contains things that most routes would need such as access to the database and the auth checking function
 //not sure why i need to do this, node is werid
 var exports = module.exports = {}
@@ -39,4 +41,8 @@ exports.makeId = function (length) {
 
 exports.sleep = function (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+exports.make404 = function(res) {
+    return res.status(404).render('404', { title: "404 Not Found" });
 }
