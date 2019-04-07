@@ -4,7 +4,8 @@
 <br>
 <h5>{{this.name}}</h1>
 <p>1/10 Players</p>
-<a href="/games/view?id={{this.id}}">View</a> {{#if (eq this.creator ../req.user.id)}}<a href="/games/edit?id={{this.id}}">Edit</a>{{/if}}
+                                                                {{!placeholder user id}}
+<a href="/games/view?id={{this.id}}">View</a> {{#if (eq this.creator 2)}}<a href="/games/edit?id={{this.id}}">Edit</a>{{/if}}
 {{else}}
 <br>
 There's nothing here.

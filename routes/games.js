@@ -35,7 +35,7 @@ function validateGameInput(body) {
 
     if (!name) { return 'The game name cannot be empty.';  }
     else if (name.length > 20) { return 'The game name cannot be more than 20 characters.' }
-    else if (description.length > 2000) { return 'The game name cannot be more than 2,000 characters.' }
+    else if (description.length > 2000) { return 'The game description cannot be more than 2,000 characters.' }
     else if (!maxplayers) { return 'The max players cannot be empty.' }
     else if (isNaN(maxplayers)) { return 'The max players must be a number.' }
     else if (maxplayers > 200) { return 'The max players cannot be greater than 200.' }
@@ -51,7 +51,7 @@ function validateGameInput(body) {
 async function validateQuery(req, next) {
     if (isNaN(Number(req.query.id))) return false; // Number() converts req.query.id into a number because express returns all queries as strings
     
-    const [game] = await database.fetchGamesByIdAndExists(next, req.query.id);
+    const game = await database.fetchGameByIdAndExists(next, req.query.id);
     if (!game.length) return false;
 
     return game;
@@ -62,55 +62,62 @@ router.get('/', async function (req, res, next) {
 });
 
 router.get('/my', async function (req, res, next) {
-    res.render('games/main', { title: 'Games', fontAwesome: true, games: true, results: await database.fetchGames(next, req.user.id) });
+    //                                                                                                           user placeholder: id
+    res.render('games/main', { title: 'Games', fontAwesome: true, games: true, results: await database.fetchGames(next, 2) });
 });
 
-router.get('/new', utils.checkAuth, function (req, res) {
+router.get('/new', function (req, res) {
     res.render('games/new', { title: 'New Game', games: true });
 });
 
-router.post('/new', utils.checkAuth, async function (req, res, next) {
+router.post('/new', async function (req, res, next) {
     var result = validateGameInput(req.body);
 
     if (!result.success) {
         return res.render('games/new', { title: 'New Game', games: true, error: result });
     }
 
-    const [game] = await database.createGame(next, result.name, req.user.id, result.description);
+    //                                                      user placeholder id
+    const game = await database.createGame(next, result.name, 2, result.description);
     res.redirect(`/games/view?id=${game.insertId}`);
 });
 
 router.get('/view', async function (req, res, next) {
-    const result = validateQuery(req, next);
-    if (result === false) return make404(res);
+    const result = await validateQuery(req, next);
+    if (result === false) return utils.make404(res);
 
-    res.render('games/view', { title: 'Games', fontAwesome: true, games: true, game: result, servers: await database.fetchJobsByGame(next, req.query.id) })
+    res.render('games/view', { title: 'Games', fontAwesome: true, games: true, game: result[0], servers: await database.fetchJobsByGame(next, req.query.id) })
 });
 
-router.get('/edit', utils.checkAuth, async function (req, res, next) {
-    const result = validateQuery(req, next);
-    if (result === false) return make404(res);
-    if (result[0].creator !== req.user.id) return make404(res);
+router.get('/edit', async function (req, res, next) {
+    const result = await validateQuery(req, next);
+    console.log(result)
+    if (result === false) return utils.make404(res);
+    //                     user placeholder id
+    if (result[0].creator !== 2) return utils.make404(res);
 
     res.render('games/edit', { title: 'Edit Game', games: true, game: result[0] })
 });
 
-router.post('/edit', utils.checkAuth, async function (req, res, next) {
-    var result = validateQuery(req, next);
+router.post('/edit', async function (req, res, next) {
+    var result = await validateQuery(req, next);
     var input = validateGameInput(req.body);
 
-    if (result === false) return make404(res);
-    if (result[0].creator !== req.user.id) return make404(res);
-    if (!input.success) return res.render('games/new', { title: 'New Game', games: true, error: result });
+    if (result === false) return utils.make404(res);
+    //                  user placeholder id
+    if (result[0].creator !== 2) return utils.make404(res);
+    console.log(input)
+    if (!input.success) return res.render('games/new', { title: 'New Game', games: true, error: input });
 
-    await database.editGame(input.name, input.description, req.query.id);
+    await database.editGame(next, input.name, input.description, req.query.id);
     
-    const [game] = await database.fetchGamesByIdAndExists(next, req.query.id);
+    const game = await database.fetchGameByIdAndExists(next, req.query.id);
+    console.log(game)
     res.render('games/edit', { title: 'New Game', games: true, success: 'Edited!', game: game[0] })
 });
 
 router.post('/announce', async function (req, res, next) { // TODO: Move this to API server? (api.ourblox.pw)
-    var result = validateQuery(req, next);
+    var result = await validateQuery(req, next);
     if (result === false) return res.status(400).json({'success': false, 'reason': 'Invalid game.'});
 
     if (result[0].laststart > Date.now() - 5000) {
@@ -129,11 +136,14 @@ router.get('/token', async function (req, res, next) {
     
     async function checkServer() {
         counter += 1;
+        console.log(counter)
         if (counter >= 5) return res.json({'success': false, 'reason': 'Server did not start'});
-        
-        const [job] = await connection.promise().query('SELECT * FROM jobs WHERE game = ? AND deleted = 0', req.query.id).catch(err => next(err))
+
+        const job = await database.fetchJobsByGameAndExists(next, req.query.id);
+        console.log(job)
         if (job.length) {
-            const url = encodeURIComponent(`https://ourblox.pw/game/join?ip=game.ourblox.pw&port=${job[0].port}&name=${req.user.username}&id=1&placeid=${req.query.id}&following=0&bc=OutrageousBuildersClub&age=0`)
+                                                                                                                    //user placeholder name
+            const url = encodeURIComponent(`https://ourblox.pw/game/join?ip=game.ourblox.pw&port=${job[0].port}&name=Placeholder&id=1&placeid=${req.query.id}&following=0&bc=OutrageousBuildersClub&age=0`)
             return res.json({'success': true, 'url': `ourbloxplay17:1+launchmode:play+gameinfo:'${job[0].name}'+placelauncherurl:${url}`})
         } else {
             await utils.sleep(2000);
@@ -144,22 +154,29 @@ router.get('/token', async function (req, res, next) {
     var result = await validateQuery(req, next);
     if (result === false) return utils.make404(res);
 
-    const [job] = await database.fetchJobsByGameAndExists(next, req.query.id);
+    const job = await database.fetchJobsByGameAndExists(next, req.query.id);
     const jobId = `ourblox-${utils.makeId(6)}-${req.query.id}`;
+
+    console.log(job)
 
     // Delay to prevent server spamming
     if (!job.length && result[0].laststart > Date.now() - 5000) {
+        console.log("a")
         checkServer();
     }
     else if (!job.length) {
-        var result = jobHandler.openJob(next, 604800, req.query.id, jobId);
+        console.log("b")
+        var result = await jobHandler.openJob(next, 604800, req.query.id, jobId);
 
         if (!result) {
             next('Gameserver returned error');
+        } else {
+            checkServer()
         }
     }
   else {
-    const url = encodeURIComponent(`https://ourblox.pw/game/join?ip=game.ourblox.pw&port=${job[0].port}&name=${req.user.username}&id=1&placeid=${req.query.id}&following=0&bc=OutrageousBuildersClub&age=0`);
+                                                                                                        //user placeholder name
+    const url = encodeURIComponent(`https://ourblox.pw/game/join?ip=game.ourblox.pw&port=${job[0].port}&name=Placeholder&id=1&placeid=${req.query.id}&following=0&bc=OutrageousBuildersClub&age=0`);
     res.json({'success': true, 'url': `ourbloxplay17:1+launchmode:play+gameinfo:'${job[0].name}'+placelauncherurl:${url}`});
   }
 })

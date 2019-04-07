@@ -1,12 +1,12 @@
-# OurBlox
+# Ourblox
 
-This is the source code for the OurBlox public website.
+This is the source code for the Ourblox public website.
 
-Copyright OurBlox.pw 2019. All rights reserved.
+Copyright Ourblox 2019. All rights reserved.
 
 # Warning
 
-This project is UNLICENSED meaning you cannot legally use it in your own project if you somehow get ahold of this. If you ignore this warning, bad things will happen.
+This project is UNLICENSED and CONFIDENTIAL. If you somehow obtain this source code and run it on your own server, bad things will happen.
 
 # Credits
 

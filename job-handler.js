@@ -18,11 +18,12 @@ exports.closeJob = function(next, id) {
 }
 
 exports.openJob = function(next, expiration, placeID, jobID) {
+    console.log("wtf")
     fetch(config.job.soapUrl, 
         {
             method: 'POST', 
             body: 
-               `<ns1:OpenJob>
+               `${soap.body}<ns1:OpenJob>
                 <ns1:job>
                     <ns1:id>${jobID}</ns1:id>
                     <ns1:expirationInSeconds>${expiration}</ns1:expirationInSeconds>
@@ -31,11 +32,12 @@ exports.openJob = function(next, expiration, placeID, jobID) {
                     <ns1:name>Start Server</ns1:name>
                     <ns1:script>loadstring(game:HttpGet('https://ourblox.pw/game/gameserver.ashx?data=${placeID};0;${jobID};${config.job.assetUrl}', true))()</ns1:script>
                 </ns1:script>
-                </ns1:OpenJob>` 
+                </ns1:OpenJob>${soap.bodyEnd}` 
         }
     )
-    .then(function(res) { if (!res.ok) return false; })
+    .then(function(res) { if (!res.ok) return next("Gameserver returned error")})
     .catch(err => next(err));
 
+    console.log("jka")
     return true;
 }
