@@ -64,3 +64,18 @@ exports.updateJob = async function(next, players, job) {
     const [results] = await connection.promise().query('UPDATE jobs SET players = ?, lastping = ? WHERE name = ?', [players, Date.now(), job]).catch(err => next(err));
     return results
 }
+
+exports.fetchUser = async function(next, id) {
+    const [results] = await connection.promise().query('SELECT * from users WHERE id = ?', [id]).catch(err => next(err));
+    return results
+}
+
+exports.fetchUserByName = async function(next, name) {
+    const [results] = await connection.promise().query('SELECT * from users WHERE username = ?', [name]).catch(err => next(err));
+    return results
+}
+
+exports.createUser = async function(next, username, email, password) {
+    const [results] = await connection.promise().query('INSERT INTO users SET username = ?, email = ?, password = ?', [username, email, password]).catch(err => next(err));
+    return results
+}

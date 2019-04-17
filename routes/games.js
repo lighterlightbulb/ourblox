@@ -106,7 +106,6 @@ router.post('/edit', async function (req, res, next) {
     if (result === false) return utils.make404(res);
     //                  user placeholder id
     if (result[0].creator !== 2) return utils.make404(res);
-    console.log(input)
     if (!input.success) return res.render('games/new', { title: 'New Game', games: true, error: input });
 
     await database.editGame(next, input.name, input.description, req.query.id);

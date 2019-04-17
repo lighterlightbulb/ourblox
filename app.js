@@ -13,17 +13,17 @@ require('dotenv').config()
 var express = require('express')
 var exphbs  = require('express-handlebars')
 var session  = require('cookie-session')
-var passport = require('passport')
-var DiscordStrategy = require('passport-discord').Strategy
-var refresh = require('passport-oauth2-refresh')
+//var passport = require('passport')
+//var DiscordStrategy = require('passport-discord').Strategy
+//var refresh = require('passport-oauth2-refresh')
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
 var utils = require('./utils')
-
-var connection = utils.connection
+var database = require('./database')
 
 var app = express()
 
+/*
 passport.serializeUser(function(user, done) {
   done(null, user)
 })
@@ -48,24 +48,9 @@ var discordStrat = new DiscordStrategy({
       })
     })
 })
+*/
 
 app.use(express.static('static'))
-
-//logging
-app.use(morgan('dev'))
-
-passport.use(discordStrat)
-refresh.use(discordStrat)
-
-//use res/req in handlebars
-app.use(function(req,res,next){
-    res.locals.req = req
-	res = res
-    next()
-})
-
-//app.enable('trust proxy')
-app.disable('x-powered-by');
 
 //session
 app.use(session({
@@ -75,8 +60,36 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
+app.use(async function (req, res, next) {
+  if (req.session.id) {
+    const user = await database.fetchUser(next, req.session.id)
+    req.session.username = user[0].username
+    next()
+  } else {
+    next()
+  }
+})
+
+//logging
+app.use(morgan('dev'))
+
+//passport.use(discordStrat)
+//refresh.use(discordStrat)
+
+//use res/req in handlebars
+app.use(function(req,res,next){
+    res.locals.req = req
+	res = res
+    next()
+})
+
+//app.enable('trust proxy')
+app.disable('x-powered-by')
+
+/*
 app.use(passport.initialize())
 app.use(passport.session())
+*/
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',

@@ -29,10 +29,10 @@
         </li>
       </ul>
       <ul class="navbar-nav my-2 my-lg-0">
-        {{#if req.user}}
+        {{#if req.session.id}}
         <li class="nav-item navbar-right dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{req.user.username}}
+            {{req.session.username}}
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/games/my">My Games</a>
@@ -43,6 +43,9 @@
         {{else}}
         <li class="nav-item">
           <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/register">Register</a>
         </li>
         {{/if}}
       </ul>

@@ -1,0 +1,21 @@
+<h1>Login</h1>
+{{~#if error}}
+<div role="alert" class="alert alert-danger">{{error}}</div>
+{{~/if}}
+{{~#if success}}
+<div role="alert" class="alert alert-success">{{success}}</div>
+{{~/if}}
+{{~#if req.query.nu}}
+<div role="alert" class="alert alert-success">You have been successfully registered. Welcome to Ourblox!</div>
+{{~/if}}
+<form method="POST">
+  <div class="form-group">
+    <label for="name">Username or Email</label>
+    <input class="form-control" name="name" maxlength="20" required>
+  </div>
+  <div class="form-group">
+    <label for="name">Password</label>
+    <input class="form-control" name="password" type="password" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>

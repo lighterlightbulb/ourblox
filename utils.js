@@ -1,7 +1,6 @@
 /* Copyright 2019 Ourblox, All Rights Reserved */
 
-//this file is included with all routes, it contains things that most routes would need such as access to the database and the auth checking function
-//not sure why i need to do this, node is werid
+//this file is included with most routes, it contains things that most routes would need such as access to the database and the auth checking function
 var exports = module.exports = {}
 var mysql  = require('mysql2')
 
@@ -25,7 +24,7 @@ exports.checkAuth = function (req, res, next) {
     profile.accessToken = accessToken // store this new one for our new requests!
 })
 */
-    if (req.isAuthenticated()) return next()
+    if (req.session.id) return next()
     res.redirect("/login")
 }
 

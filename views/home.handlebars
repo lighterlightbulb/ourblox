@@ -1,1 +1,5 @@
-<h1>Welcome.</h1>
+{{#if req.session.id}}
+<h1>Welcome back, {{req.session.username}}.</h1>
+{{else}}
+<h1>Welcome, would you like to <a href="/login">login</a>?</h1>
+{{/if}}
