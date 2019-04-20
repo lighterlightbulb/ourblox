@@ -90,17 +90,6 @@ router.get('/logout', function (req, res) {
     res.redirect('/')
 })
 
-//bcrypt.hash("fuck", 10).then(function(hash) {
-    //console.log(hash)
-//})
-/*
-router.get('/login', passport.authenticate('discord', { scope: ['identify'] }), function (req, res) {})
-
-router.get('/callback',
-    passport.authenticate('discord', { failureRedirect: '/' }), function (req, res) { res.redirect('/') } // auth success
-)
-*/
-
 router.get('/data', utils.checkAuth, function (req, res) {
     //console.log(req.user)
     res.json(req.session)

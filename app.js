@@ -31,11 +31,7 @@ const accessControl = require('express-ip-access-control')
 const options = {
     mode: 'allow',
     allows: ['71.114.57.246', '::ffff:192.168.1.1', '192.168.1.1', '127.0.0.1', '::1',],
-    /*
-    log: function(clientIp, access) {
-        console.log(clientIp + (access ? ' accessed.' : ' denied.'));
-    },
-    */
+    log: false,
     statusCode: 401,
     message: '401 Unauthorized: This service is not intended for public use.'
 }
@@ -68,9 +64,6 @@ app.use(async function (req, res, next) {
 //logging
 app.use(morgan('dev'))
 
-//passport.use(discordStrat)
-//refresh.use(discordStrat)
-
 //use res/req in handlebars
 app.use(function(req,res,next){
     res.locals.req = req
@@ -78,13 +71,7 @@ app.use(function(req,res,next){
     next()
 })
 
-//app.enable('trust proxy')
 app.disable('x-powered-by')
-
-/*
-app.use(passport.initialize())
-app.use(passport.session())
-*/
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',
