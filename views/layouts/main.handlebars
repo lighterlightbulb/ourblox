@@ -27,6 +27,17 @@
         <li class="nav-item {{#if games}}active{{/if}}">
           <a class="nav-link" href="/games">Games</a> {{#if games}}<span class="sr-only">(current)</span>{{/if}}
         </li>
+        <li class="nav-item {{#if users}}active{{/if}}">
+          <a class="nav-link" href="/users">Users</a> {{#if users}}<span class="sr-only">(current)</span>{{/if}}
+        </li>
+        <li class="nav-item {{#if catalog}}active{{/if}}">
+          <a class="nav-link" href="/catalog">Catalog</a> {{#if users}}<span class="sr-only">(current)</span>{{/if}}
+        </li>
+        {{#if req.session.admin}}
+        <li class="nav-item {{#if admin}}active{{/if}}">
+          <a class="nav-link" href="/admin">Admin</a> {{#if admin}}<span class="sr-only">(current)</span>{{/if}}
+        </li>
+        {{/if}}
       </ul>
       <ul class="navbar-nav my-2 my-lg-0">
         {{#if req.session.id}}

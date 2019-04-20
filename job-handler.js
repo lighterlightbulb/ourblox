@@ -1,8 +1,8 @@
-var soap = require('./soap');
-var fetch = require('node-fetch');
-var exports = module.exports = {};
+var soap = require('./soap')
+var fetch = require('node-fetch')
+var exports = module.exports = {}
 
-const config = require('./config.json');
+require('dotenv').config()
 
 exports.closeJob = function(next, id) {
     fetch(config.job.soapUrl, 
@@ -12,13 +12,12 @@ exports.closeJob = function(next, id) {
         }
     )
     .then(function(res) { if (!res.ok) return false; })
-    .catch(err => next(err));
+    .catch(err => next(err))
 
-    return true;
+    return true
 }
 
 exports.openJob = function(next, expiration, placeID, jobID) {
-    console.log("wtf")
     fetch(config.job.soapUrl, 
         {
             method: 'POST', 
@@ -30,14 +29,13 @@ exports.openJob = function(next, expiration, placeID, jobID) {
                 </ns1:job>
                 <ns1:script>
                     <ns1:name>Start Server</ns1:name>
-                    <ns1:script>loadstring(game:HttpGet('https://ourblox.pw/game/gameserver.ashx?data=${placeID};0;${jobID};${config.job.assetUrl}', true))()</ns1:script>
+                    <ns1:script>loadstring(game:HttpGet('https://ourblox.pw/game/gameserver.ashx?data=${placeID};0;${jobID};${process.env.SOAP_ASSETURL}', true))()</ns1:script>
                 </ns1:script>
                 </ns1:OpenJob>${soap.bodyEnd}` 
         }
     )
     .then(function(res) { if (!res.ok) return next("Gameserver returned error")})
-    .catch(err => next(err));
+    .catch(err => next(err))
 
-    console.log("jka")
-    return true;
+    return true
 }

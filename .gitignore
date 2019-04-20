@@ -1,3 +1,10 @@
+# Project specific
+assets
+anus.png
+anus.png.png
+ssl
+PRIVATEKEY_BASE64.txt
+
 # Logs
 logs
 *.log

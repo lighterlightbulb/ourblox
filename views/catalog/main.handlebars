@@ -1,0 +1,42 @@
+<div class="search">
+<form method="get" class="search">
+    <input class="form-control" name="q" placeholder="What item do you want to find?" required>
+    <button type="submit" data-toggle="modal" class="btn btn-primary">Submit</button>
+</form>
+
+<a href="/catalog/create"><button type="button" data-toggle="modal" class="btn btn-primary">Create</button></a>
+
+<div class="sortbydropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Sort by...
+  </button>
+  <div class="dropdown-menu" aria-labelledby="sortByMenuButton">
+    <a class="dropdown-item" href="/catalog">All</a>
+    <a class="dropdown-item" href="/catalog/hats">Hats</a>
+    <a class="dropdown-item" href="/catalog/gear">Gear</a>
+    <a class="dropdown-item" href="/catalog/heads">Heads</a>
+    <a class="dropdown-item" href="/catalog/faces">Faces</a>
+    <a class="dropdown-item" href="/catalog/shirts">Shirts</a>
+    <a class="dropdown-item" href="/catalog/pants">Pants</a>
+    <a class="dropdown-item" href="/catalog/tshirts">T-Shirts</a>
+    <a class="dropdown-item" href="/catalog/decals">Decals</a>
+    <a class="dropdown-item" href="/catalog/audios">Audios</a>
+    <a class="dropdown-item" href="/catalog/models">Models</a>
+  </div>
+</div>
+</div>
+
+<div class="items">
+    {{#each items}}
+    <a href="/catalog/view?id={{this.id}}" style="text-decoration: none; color: inherit;">
+    <div class="card" style="width:150px;">
+        <img class="card-img" src="/img/renders/{{this.id}}.png" style="height:100px; width:100px;" alt="Item Image">
+        <div class="card-body">
+            <h5 class="truncate" style="width: 150px; font-size: 17px;">{{this.name}}</h5>
+            <p class="truncate text-muted" style="width:150px; font-size: 10px;"><b>Created by</b> {{this.creatorName}}</p>
+            <p>${{this.price}}</p>
+        </div>
+    </div>
+    </a>
+    {{/each}}
+</div>

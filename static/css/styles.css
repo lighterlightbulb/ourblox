@@ -1,3 +1,23 @@
+.main {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+.hidden {
+    display: none;
+}
+.search {
+    display: flex;
+    justify-content: center;
+}
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.currency {
+    display: flex;
+    align-items: center;
+}
 .no-overflow {
     overflow: hidden;
     text-overflow: ellipsis;

@@ -1,4 +1,8 @@
 {{#each users}}
+<a href="/user?id={{this.id}}">{{this.username}}</a>
+<br>
+{{date 0 this.lastseen}}
+<br>
 {{else}}
 What? There's no users?!?!?!
 {{/each}}

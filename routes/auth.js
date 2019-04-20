@@ -7,26 +7,6 @@ const utils = require('../utils')
 const database = require('../database')
 const validator = require('validator')
 
-function validateUserInput(body) {
-    const name = body.name.trim();
-    const description = body.description.trim();
-    const maxplayers = body.maxplayers;
-
-    if (!name) { return 'The game name cannot be empty.';  }
-    else if (name.length > 20) { return 'The game name cannot be more than 20 characters.' }
-    else if (description.length > 2000) { return 'The game description cannot be more than 2,000 characters.' }
-    else if (!maxplayers) { return 'The max players cannot be empty.' }
-    else if (isNaN(maxplayers)) { return 'The max players must be a number.' }
-    else if (maxplayers > 200) { return 'The max players cannot be greater than 200.' }
-
-    return {
-        success: true,
-        name: name,
-        description: description,
-        maxplayers: maxplayers
-    }
-}
-
 router.get('/login', function (req, res) {
     res.render('auth/login', { title: 'Login' })
 })

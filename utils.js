@@ -45,3 +45,19 @@ exports.sleep = function (ms) {
 exports.make404 = function(res) {
     return res.status(404).render('404', { title: "404 Not Found" });
 }
+
+exports.filter = function(string) {
+	let white = string;
+	let black = string;
+	
+	if (filtered.indexOf(string) > -1)
+	{
+		white = white.replace(filtered[string], "#".repeat(filtered[string]));
+		black = "#".repeat(string.length);
+	}
+	
+	return {
+		"white": white,
+		"black": black
+	}
+}
