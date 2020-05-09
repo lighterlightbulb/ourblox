@@ -1,5 +1,14 @@
-{{#if req.session.id}}
-<h1>Welcome back, {{req.session.username}}.</h1>
-{{else}}
-<h1>Welcome, would you like to <a href="/login">login</a>?</h1>
-{{/if}}
+<div class="has-text-centered">
+    {{#if req.session.id}}
+    <h1 class="title">Welcome back.</h1>
+    {{else}}
+    <h1 class="title">Welcome.</h1>
+    <p>Would you like to <a href="/login">login</a>?</p>
+    {{/if}}
+    <br>
+    <div class="columns">
+        <div class="column"><div class="box">0% China</div></div>
+        <div class="column"><div class="box">0% Coke</div></div>
+        <div class="column"><div class="box">0% Gay</div></div>
+    </div>
+</div>

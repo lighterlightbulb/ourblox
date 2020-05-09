@@ -7,11 +7,11 @@ const utils = require('../utils')
 const database = require('../database')
 const validator = require('validator')
 
-router.get('/login', function (req, res) {
+router.get('/login', utils.checkLoggedOut, function (req, res) {
     res.render('auth/login', { title: 'Login' })
 })
 
-router.post('/login', async function (req, res, next) {
+router.post('/login', utils.checkLoggedOut, async function (req, res, next) {
     const name = req.body.name
     const password = req.body.password
     
@@ -35,7 +35,11 @@ router.post('/login', async function (req, res, next) {
 
     if (match) {
         req.session.id = user[0].id
-        res.redirect("/")
+        if (req.query.returnUrl && req.query.returnUrl.startsWith("/")) {
+            res.redirect(req.query.returnUrl)
+        } else {
+            res.redirect("/")
+        }
     } else {
         return error("Invalid username or password.")
     }
@@ -45,11 +49,11 @@ router.post('/login', async function (req, res, next) {
     }
 })
 
-router.get('/register', function (req, res) {
+router.get('/register', utils.checkLoggedOut, function (req, res) {
     res.render('auth/register', { title: 'Register' })
 })
 
-router.post('/register', async function (req, res, next) {
+router.post('/register', utils.checkLoggedOut, async function (req, res, next) {
     const name = req.body.name
     const email = req.body.email
     const password = req.body.password
@@ -85,7 +89,7 @@ router.post('/register', async function (req, res, next) {
     }
 })
 
-router.get('/logout', function (req, res) {
+router.get('/logout', utils.checkAuth, function (req, res) {
     req.session = null
     res.redirect('/')
 })

@@ -134,6 +134,7 @@ const games = require('./routes/games')
 const users = require('./routes/users')
 const catalog = require('./routes/catalog')
 const api = require('./routes/api')
+const character = require('./routes/character')
 
 app.use('/', main)
 app.use('/', auth)
@@ -141,13 +142,14 @@ app.use('/games', games)
 app.use('/', users)
 app.use('/catalog', catalog)
 app.use('/', api)
+app.use('/character', character)
 
 app.all('/*', function (req, res) {
   res.status(404).render('404', { title: "404 Not Found" })
 })
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+const httpServer = http.createServer(app)
+const httpsServer = https.createServer(credentials, app)
 
 httpServer.listen(process.env.PORT, () => {
 	console.log('Application server running on port 80')

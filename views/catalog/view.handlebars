@@ -1,7 +1,20 @@
-{{item.name}}
+<div class="columns is-centered">
+<div class="column is-narrow">
+<div class="box">
+<h1 class="subtitle">{{item.name}}</h1>
 <br>
-By {{item.creatorName}}
+{{#if (or (eq item.type 'face') (eq item.type 'decal'))}}
+<img src="/asset?id={{item.id}}" width="150" height="150" onerror="this.onerror = null; this.src = '/renders/error.png'" alt="Item Image">
+{{else}}
+<img src="/renders/{{item.id}}.png" width="150" height="150" onerror="this.onerror = null; this.src = '/renders/error.png'" alt="Item Image">
+{{/if}}
 <br>
-${{item.price}}
+By <b>{{item.creatorName}}</b>
 <br>
-<button type="button" class="btn btn-primary" onclick="buyItem({{item.id}})">Buy</button>
+<b>${{item.price}}</b>
+<br>
+<br>
+<button class="button is-dark" onclick="buyItem({{item.id}})">Buy</button>
+</div>
+</div>
+</div>

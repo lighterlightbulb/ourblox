@@ -25,8 +25,13 @@ exports.checkAuth = function (req, res, next) {
 })
 */
     if (req.session.id) return next()
-    res.redirect("/login")
+    res.redirect(`/login?returnUrl=${req.originalUrl}`)
 }
+
+exports.checkLoggedOut = function (req, res, next) {
+     if (!req.session.id) return next()
+     res.redirect("/")
+ }
 
 exports.makeId = function (length) {
   var text = ""

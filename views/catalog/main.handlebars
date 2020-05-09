@@ -1,42 +1,60 @@
-<div class="search">
-<form method="get" class="search">
-    <input class="form-control" name="q" placeholder="What item do you want to find?" required>
-    <button type="submit" data-toggle="modal" class="btn btn-primary">Submit</button>
-</form>
+<div class="box">
 
-<a href="/catalog/create"><button type="button" data-toggle="modal" class="btn btn-primary">Create</button></a>
-
-<div class="sortbydropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Sort by...
-  </button>
-  <div class="dropdown-menu" aria-labelledby="sortByMenuButton">
-    <a class="dropdown-item" href="/catalog">All</a>
-    <a class="dropdown-item" href="/catalog/hats">Hats</a>
-    <a class="dropdown-item" href="/catalog/gear">Gear</a>
-    <a class="dropdown-item" href="/catalog/heads">Heads</a>
-    <a class="dropdown-item" href="/catalog/faces">Faces</a>
-    <a class="dropdown-item" href="/catalog/shirts">Shirts</a>
-    <a class="dropdown-item" href="/catalog/pants">Pants</a>
-    <a class="dropdown-item" href="/catalog/tshirts">T-Shirts</a>
-    <a class="dropdown-item" href="/catalog/decals">Decals</a>
-    <a class="dropdown-item" href="/catalog/audios">Audios</a>
-    <a class="dropdown-item" href="/catalog/models">Models</a>
+  <div class="field is-grouped">
+      <div class="control">
+        <input class="input" name="q" placeholder="What item do you want to find?" required>
+      </div>
+      <div class="control">
+        <button type="submit" class="button">Submit</button>
+      </div>
+      <div class="control">
+        <a class="button" href="/catalog/create">Create</a>
+      </div>
+      <div class="control">
+        <div class="dropdown is-hoverable">
+          <div class="dropdown-trigger">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+              <span>Sort by...</span>
+              <span class="icon is-small">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <a class="dropdown-item" href="/catalog">All</a>
+              <a class="dropdown-item" href="/catalog/hats">Hats</a>
+              <a class="dropdown-item" href="/catalog/gear">Gear</a>
+              <a class="dropdown-item" href="/catalog/heads">Heads</a>
+              <a class="dropdown-item" href="/catalog/faces">Faces</a>
+              <a class="dropdown-item" href="/catalog/shirts">Shirts</a>
+              <a class="dropdown-item" href="/catalog/pants">Pants</a>
+              <a class="dropdown-item" href="/catalog/tshirts">T-Shirts</a>
+              <a class="dropdown-item" href="/catalog/decals">Decals</a>
+              <a class="dropdown-item" href="/catalog/audios">Audios</a>
+              <a class="dropdown-item" href="/catalog/models">Models</a>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
-</div>
-
-<div class="items">
+<br>
+<div class="columns is-multiline">
     {{#each items}}
-    <a href="/catalog/view?id={{this.id}}" style="text-decoration: none; color: inherit;">
-    <div class="card" style="width:150px;">
-        <img class="card-img" src="/img/renders/{{this.id}}.png" style="height:100px; width:100px;" alt="Item Image">
-        <div class="card-body">
-            <h5 class="truncate" style="width: 150px; font-size: 17px;">{{this.name}}</h5>
-            <p class="truncate text-muted" style="width:150px; font-size: 10px;"><b>Created by</b> {{this.creatorName}}</p>
-            <p>${{this.price}}</p>
+    <div class="column is-narrow">
+      <a href="/catalog/view?id={{this.id}}">
+        <div class="box">
+          {{#if (or (eq this.type 'face') (eq this.type 'decal'))}}
+          <img src="/asset?id={{this.id}}" width="150" height="150" onerror="this.onerror = null; this.src = '/renders/error.png'" alt="Item Image">
+          {{else}}
+          <img src="/renders/{{this.id}}.png" width="150" height="150" onerror="this.onerror = null; this.src = '/renders/error.png'" alt="Item Image">
+          {{/if}}
+          <h5 class="truncate" style="width: 150px; font-size: 17px;">{{this.name}}</h5>
+          <p class="truncate text-muted" style="width:150px; font-size: 10px;">By <b>{{this.creatorName}}</b></p>
+          <b>${{this.price}}</b>
         </div>
+      </a>
     </div>
-    </a>
     {{/each}}
 </div>

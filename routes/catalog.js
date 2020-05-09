@@ -16,13 +16,13 @@ const bluebird = require("bluebird")
 bluebird.promisifyAll(Magic.prototype)
 
 async function validateItemInput(name, description, price, type, file, creation) {
-    const allowedTypes = ["shirt", "pants", "tshirt", "decal", "audio", "model"]
+    const allowedTypes = ["shirt", "pants", "tshirt", "decal", "audio", "model", "face"]
     const allowedFileTypes = ["image/png", "image/jpeg"]
     const magic = new Magic(mmm.MAGIC_MIME_TYPE)
     
     if (!name) { return 'The item name cannot be empty.';  }
     else if (name.length > 20) { return 'The item name cannot be more than 20 characters.' }
-    else if (description.length > 2000) { return 'The item description cannot be more than 2,000 characters.' }
+    else if (description && description.length > 2000) { return 'The item description cannot be more than 2,000 characters.' }
     else if (!price) { return 'The price cannot be empty.' }
     else if (isNaN(price)) { return 'The price must be a number.' }
     else if (price > 2147483647) { return 'The price cannot be greater than 2147483647.' }
@@ -56,29 +56,35 @@ router.get('/view', async function (req, res, next) {
     res.render('catalog/view', { title: 'Viewing Item', catalog: true, item: item[0] })
 })
 
-router.get('/create', function (req, res, next) {
+router.get('/create', utils.checkAuth, function (req, res, next) {
     res.render('catalog/create', { title: 'New Item', catalog: true })
 })
 
-router.post('/create', multipart, async function (req, res, next) {
+router.post('/create', utils.checkAuth, multipart, async function (req, res, next) {
     const name = req.body.name
     const description = req.body.description
     const price = Number(req.body.price)
-    const type = req.body.type
-    const offsale = req.body.offsale
-
+    const type = req.body.type.toLowerCase()
+    let offsale
+    
     const result = await validateItemInput(name, description, price, type, req.files.file, true)
 
     if (result !== true) {
         return res.render('catalog/create', { title: 'New Item', catalog: true, error: result })
     }
 
-    const game = await database.createItem(next, name, description, req.session.id, type, null, 0, price, 0)
+    if (req.body.offsale) { offsale = 1 } else { offsale = 0 }
+    
+    const item = await database.createItem(next, name, description, req.session.id, type, null, 0, price, offsale)
 
-    fs.rename(req.files.file.path, `static/catalog/${game.insertId}`, (err) => {
+    fs.rename(req.files.file.path, `assets/${item.insertId}`, async function (err) {
         if (err) throw err
-        res.redirect(`/catalog/view?id=${game.insertId}`)
+        if (type !== 'face' && type !== 'decal') {
+            console.log(type)
+            await database.insertQueue(next, null, item.insertId, type)
+        }
+        res.redirect(`/catalog/view?id=${item.insertId}`)
     })
-});
+})
 
 module.exports = router

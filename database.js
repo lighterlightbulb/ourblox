@@ -111,7 +111,22 @@ exports.createItem = async function(next, name, description, creator, type, asse
     return results
 }
 
-exports.fetchQueue = async function(next, id) {
+exports.fetchQueue = async function(next) {
     const [results] = await connection.promise().query('SELECT * from queue').catch(err => next(err));
+    return results
+}
+
+exports.fetchQueueById = async function(next, id) {
+    const [results] = await connection.promise().query('SELECT * from queue WHERE id =?', id).catch(err => next(err));
+    return results
+}
+
+exports.insertQueue = async function(next, user, asset, assetType) {
+    const [results] = await connection.promise().query('INSERT INTO queue SET user = ?, asset = ?, assettype = ?, createdon = ?', [user, asset, assetType, Date.now()]).catch(err => next(err));
+    return results
+}
+
+exports.deleteQueue = async function(next, id) {
+    const [results] = await connection.promise().query('DELETE FROM queue WHERE id = ?', id).catch(err => next(err));
     return results
 }

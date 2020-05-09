@@ -6,69 +6,94 @@
 
     <title>{{title}} - OurBlox</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    {{~#if fontAwesome~}}<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">{{/if}}
+    <link rel="stylesheet" href="/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">
-      <img src="/img/logo.png" width="30" height="30" alt="OurBlox Logo">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img src="/img/logo.png" width="30" height="30" alt="OurBlox Logo">
+      </a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item {{#if home}}active{{/if}}">
-          <a class="nav-link" href="/">Home {{#if home}}<span class="sr-only">(current)</span>{{/if}}</a>
-        </li>
-        <li class="nav-item {{#if games}}active{{/if}}">
-          <a class="nav-link" href="/games">Games</a> {{#if games}}<span class="sr-only">(current)</span>{{/if}}
-        </li>
-        <li class="nav-item {{#if users}}active{{/if}}">
-          <a class="nav-link" href="/users">Users</a> {{#if users}}<span class="sr-only">(current)</span>{{/if}}
-        </li>
-        <li class="nav-item {{#if catalog}}active{{/if}}">
-          <a class="nav-link" href="/catalog">Catalog</a> {{#if users}}<span class="sr-only">(current)</span>{{/if}}
-        </li>
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbar" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/">
+          Home
+        </a>
+        <a class="navbar-item" href="/games">
+          Games
+        </a>
+        <a class="navbar-item" href="/users">
+          Users
+        </a>
+        <a class="navbar-item" href="/catalog">
+          Catalog
+        </a>
+        <a class="navbar-item" href="/character">
+          Character
+        </a>
         {{#if req.session.admin}}
-        <li class="nav-item {{#if admin}}active{{/if}}">
-          <a class="nav-link" href="/admin">Admin</a> {{#if admin}}<span class="sr-only">(current)</span>{{/if}}
-        </li>
+        <a class="navbar-item" href="/Admin">
+          Admin
+        </a>
         {{/if}}
-      </ul>
-      <ul class="navbar-nav my-2 my-lg-0">
+      </div>
+
+      <div class="navbar-end">
         {{#if req.session.id}}
-        <li class="nav-item navbar-right dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
             {{req.session.username}}
           </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/games/my">My Games</a>
-            <a class="dropdown-item" href="/forum/my">My Forum Posts</a>
-            <a class="dropdown-item" href="/logout">Logout</a>
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="/games/my">
+              My Games
+            </a>
+            <a class="navbar-item" href="/forum/my">
+              My Forum Posts
+            </a>
+            <a class="navbar-item" href="/logout">
+              Logout
+            </a>
+            <hr class="navbar-divider">
+            <a class="navbar-item" href="/modmail">
+              Report an issue
+            </a>
           </div>
-        </li>
+        </div>
         {{else}}
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/register">Register</a>
-        </li>
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-light" href="/login">
+              Login
+            </a>
+            <a class="button is-light" href="/register">
+              Register
+            </a>
+          </div>
+        </div>
         {{/if}}
-      </ul>
+      </div>
     </div>
+  </div>
   </nav>
   <!-- Content Begin -->
   <div class="container">
+    <br>
     {{{body}}}
   </div>
   <!-- Content End -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>

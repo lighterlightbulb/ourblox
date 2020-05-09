@@ -1,44 +1,67 @@
-<h1>New Item</h1>
+<h1 class="title">New Item</h1>
 {{~#if error}}
-<div role="alert" class="alert alert-danger">{{error}}</div>
+<article class="message is-danger">
+  <div class="message-body">
+    {{error}}
+  </div>
+</article>
 {{~/if}}
 
 <form method="POST" enctype="multipart/form-data">
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input class="form-control" name="name">
+  <div class="field">
+    <label class="label">Name</label>
+    <div class="control">
+      <input class="input" type="text" name="name">
+    </div>
   </div>
-  <div class="form-group">
-    <label for="name">Description</label>
-    <textarea class="form-control" name="description">No description</textarea>
+  <div class="field">
+    <label class="label">Description</label>
+    <div class="control">
+      <textarea class="input" type="text" name="description">No description</textarea>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="price">Price</label>
-    <input class="form-control" name="price" value="10" min="10" max="2147483647">
+  <div class="field">
+    <label class="label">Price</label>
+    <div class="control">
+      <input class="input" name="price" value="10" min="10" max="2147483647">
+    </div>
   </div>
-  <div class="form-group">
-    <label for="file">File</label>
-    <input class="form-control" name="file" type="file">
+  <div class="field">
+    <label class="label">File</label>
+    <div class="control">
+      <input class="input" name="file" type="file">
+    </div>
   </div>
-  <div class="form-group">
-    <label for="type">Type</label>
-    <select class="form-control" name="type">
-      <option value="shirt">Shirt</option>
-      <option value="pants">Pants</option>
-      <option value="tshirt">T-Shirt</option>
-      <option value="decal">Decal</option>
-      <option value="audio">Audio</option>
-      <option value="model">Model</option>
-      <option value="debug">Validation Test</option>
-      <option value="face">Validation Test 2</option>
-	  </select>
+  <div class="field">
+    <label class="label">Type</label>
+    <div class="control">
+      <div class="select">
+        <select class="input" name="type">
+          <option value="shirt">Shirt</option>
+          <option value="pants">Pants</option>
+          <option value="tshirt">T-Shirt</option>
+          <option value="decal">Decal</option>
+          <option value="audio">Audio</option>
+          <option value="model">Model</option>
+        </select>
+      </div>
+    </div>
   </div>
-  <div class="form-group">
-    <input type="checkbox" name="offsale">
-    <label for="offsale">Off-sale</label>
+  <div class="field">
+    <div class="control">
+      <div class="checkbox">
+        <label class="checkbox">
+          <input type="checkbox" name="offsale">
+          Off-sale
+        </label>
+      </div>
+    </div>
   </div>
-  <div class="form-group">
+  <div class="field">
     {{{captcha}}}
   </div>
-  <button type="submit" class="btn btn-primary">Create</button>
+  
+  <div class="control">
+    <button type="submit" class="button is-link">Create</button>
+  </div>
 </form>

@@ -5,7 +5,7 @@ var router = express.Router()
 var utils = require('../utils')
 
 router.get('/', function (req, res) {
-    res.render("home", { title: "Home", home: true })
+    res.render("home", { title: "Home" })
 })
 
 router.get('/omg', utils.checkAuth, function (req, res) {

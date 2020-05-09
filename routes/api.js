@@ -22,10 +22,29 @@ router.get('/api/getshirt/:id', async function (req, res, next) {
     res.render("char/shirt", {layout: false, id: req.params.id})
 })
 
+router.get('/api/getpants/:id', async function (req, res, next) {
+    res.contentType("text/xml")
+    res.render("char/pants", {layout: false, id: req.params.id})
+})
+
+router.get('/api/getgraphic/:id', async function (req, res, next) {
+    res.contentType("text/xml")
+    res.render("char/graphic", {layout: false, id: req.params.id})
+})
+
+router.get('/api/getdecal/:id', async function (req, res, next) {
+    res.contentType("text/xml")
+    res.render("char/decal", {layout: false, id: req.params.id})
+})
+
 router.post('/api/upload', bodyParser.text({type: 'text/plain', limit: '3mb' }), async function (req, res, next) {
-    base64.img(`data:image/png;base64,${req.body}`, '', 'anus', function (err, filePath) {
+    const queue = await database.fetchQueueById(next, req.query.id)
+    const item = await database.fetchItem(next, queue[0].asset)
+
+    base64.img(`data:image/png;base64,${req.body}`, '', `static/renders/${item[0].id}`, async function (err, filePath) {
         if (err) throw err
-        res.send("yeet")
+        await database.deleteQueue(next, req.query.id)
+        res.json({success: true})
     })
 })
 
@@ -33,11 +52,25 @@ router.get('/auth', function(req, res) {
 	res.send('')
 })
 
-router.get(['/asset/*', '/asset'], function(req, res) {
+router.get(['/asset/*', '/asset'], async function(req, res, next) {
     if (!fs.existsSync(path.join(__dirname, `../assets`, req.query.id))) {
 		return res.redirect(`https://assetgame.roblox.com/asset/?id=${req.query.id}`)
     }
-    
+        
+    if (req.query.rcc) {
+        const item = await database.fetchItem(next, req.query.id)
+        switch (item[0].type) {
+            case "shirt":
+              return res.redirect(`/api/getshirt/${req.query.id}`)
+            case "pants":
+              return res.redirect(`/api/getpants/${req.query.id}`)
+            case "tshirt":
+              return res.redirect(`/api/getgraphic/${req.query.id}`)
+            case "decal":
+              return res.redirect(`/api/getdecal/${req.query.id}`)
+        }
+    }
+
     res.sendFile(path.join(__dirname, `../assets`, req.query.id))
 })
 
@@ -185,8 +218,7 @@ router.post(['/Error/Grid.ashx', '/Error/Dmp.ashx', '/Error/Breakpad.ashx'], bod
 	var filename = req.query.filename.toString()
 	filename = filename.substring(filename.lastIndexOf('\\')).replace('\\', '')
 	
-	logger.log('api', 'blue', `Uploading log: '${filename}'`);
-	fs.writeFile(`${util.root}/logs/dump/${filename}`, req.body, (err) => { if (err) throw err; });
+	fs.writeFile(`${util.root}/logs/dump/${filename}`, req.body, (err) => { if (err) throw err; })
 	
 	res.send('')
 })
