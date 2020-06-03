@@ -1,17 +1,15 @@
 # Ourblox
+![Maintenance](https://img.shields.io/maintenance/no/2020)
 
 This is the source code for the Ourblox public website.
 
-Copyright Ourblox 2019. All rights reserved.
+Ourblox is now defunct and will never return.
 
-# Warning
-
-This project is UNLICENSED and CONFIDENTIAL. If you somehow obtain this source code and run it on your own server, bad things will happen.
+MIT Licensed
 
 # Credits
 
 * 1002
 * swirln
 * Letho
-* abb
 * drslicendice
