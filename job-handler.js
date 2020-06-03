@@ -1,3 +1,12 @@
+/*
+    Ourblox Website
+    Made by 1002, swirln
+    Contact: ozzt@shit.software, lightbulblighter@gmail.com
+
+    MIT Licensed
+	A copy of the MIT license is available in the "LICENSE" file.
+*/
+
 var soap = require('./soap')
 var fetch = require('node-fetch')
 var exports = module.exports = {}

@@ -1,4 +1,11 @@
-/* Copyright 2019 Ourblox, All Rights Reserved */
+/*
+    Ourblox Website
+    Made by 1002, swirln
+    Contact: ozzt@shit.software, lightbulblighter@gmail.com
+
+    MIT Licensed
+	A copy of the MIT license is available in the "LICENSE" file.
+*/
 
 //this file is included with most routes, it contains things that most routes would need such as access to the database and the auth checking function
 var exports = module.exports = {}

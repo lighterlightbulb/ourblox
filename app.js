@@ -1,9 +1,10 @@
 /*
     Ourblox Website
     Made by 1002, swirln
-    Contact: ozzt@protonmail.com, sw1rlnn@gmail.com
+    Contact: ozzt@shit.software, lightbulblighter@gmail.com
 
-    Copyright 2019 Ourblox, All Rights Reserved
+    MIT Licensed
+	A copy of the MIT license is available in the "LICENSE" file.
 */
 
 //'use strict'

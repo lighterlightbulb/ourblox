@@ -1,4 +1,11 @@
-/* Copyright 2019 Ourblox, All Rights Reserved */
+/*
+    Ourblox Website
+    Made by 1002, swirln
+    Contact: ozzt@shit.software, lightbulblighter@gmail.com
+
+    MIT Licensed
+	A copy of the MIT license is available in the "LICENSE" file.
+*/
 
 const express = require('express')
 const router = express.Router()
