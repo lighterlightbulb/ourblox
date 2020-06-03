@@ -1,6 +1,6 @@
 /*
     Ourblox Website
-    Made by 1002, swirln
+    Made by 1002, lightbulblighter
     Contact: ozzt@shit.software, lightbulblighter@gmail.com
 
     MIT Licensed
