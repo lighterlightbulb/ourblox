@@ -27,16 +27,23 @@ const privateKey = fs.readFileSync('ssl/server.key', 'utf8')
 const certificate = fs.readFileSync('ssl/server.crt', 'utf8')
 const credentials = {key: privateKey, cert: certificate}
 
+/*
+Uncomment the following lines for IP whitelisting:
+
 const accessControl = require('express-ip-access-control')
 const options = {
     mode: 'allow',
-    allows: ['71.114.57.246', '::ffff:192.168.1.1', '192.168.1.1', '127.0.0.1', '::1',],
+    allows: ['::ffff:192.168.1.1', '192.168.1.1', '127.0.0.1', '::1',],
     log: false,
     statusCode: 401,
     message: '401 Unauthorized: This service is not intended for public use.'
 }
+*/
 
+/*
+Uncomment for CloudFlare Real IP
 app.set('trust proxy', ['173.245.48.0/20', '103.21.244.0/22', '103.22.200.0/22', '103.31.4.0/22', '141.101.64.0/18', '108.162.192.0/18', '190.93.240.0/20', '188.114.96.0/20', '197.234.240.0/22', '198.41.128.0/17', '162.158.0.0/15', '104.16.0.0/12', '172.64.0.0/13', '131.0.72.0/22'])
+*/
 
 app.use(accessControl(options))
 
