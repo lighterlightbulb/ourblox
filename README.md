@@ -9,7 +9,7 @@ MIT Licensed
 
 # Warning
 
-This website is very poorly coded and *definitely* has security vulnerabilites. Do not use it! This repository is for historic purposes only! You have been warned.
+This website is very poorly coded and *definitely* has security vulnerabilites. Do not use it! This repository is for educational purposes only! You have been warned.
 
 # Credits
 
